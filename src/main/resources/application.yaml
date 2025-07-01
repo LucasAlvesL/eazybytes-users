@@ -18,6 +18,10 @@ spring:
       uri: http://localhost:8888/config
   config:
     import: configserver:http://localhost:8888/config
+  data:
+    redis:
+      port: 6379
+      host: localhost
 
 eureka:
   client:
