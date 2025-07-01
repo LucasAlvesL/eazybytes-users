@@ -2,12 +2,12 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/eazybytes_users
-    driver-class-name: org.postgresql.Driver
-    username: admin
-    password: admin
+    url: jdbc:mysql://localhost:3306/eazybytes_users
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -15,14 +15,14 @@ spring:
     name: service-users
   cloud:
     config:
-      uri: http://service-main:8888/config
+      uri: http://localhost:8888/config
   config:
-    import: configserver:http://service-main:8888/config
+    import: configserver:http://localhost:8888/config
 
 eureka:
   client:
     service-url:
-      defaultZone: http://service-main:8888/eureka
+      defaultZone: http://localhost:8888/eureka
   instance:
     prefer-ip-address: false
     hostname: service-users
