@@ -15,15 +15,14 @@ spring:
     name: service-users
   cloud:
     config:
-      uri: http://config-server:8888/config
+      uri: http://service-main:8888/config
   config:
-    import:
-      - configserver:http://config-server:8888/config
+    import: configserver:http://service-main:8888/config
 
 eureka:
   client:
     service-url:
-      defaultZone: http://config-server:8888/eureka
+      defaultZone: http://service-main:8888/eureka
   instance:
     prefer-ip-address: false
     hostname: service-users
