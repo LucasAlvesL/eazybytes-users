@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/eazybytes_users
+    url: jdbc:mysql://mysql-service:3306/eazybytes_users
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password:
@@ -15,9 +15,9 @@ spring:
     name: service-users
   cloud:
     config:
-      uri: http://localhost:8888/config
+      uri: http://service-main:8888/config
   config:
-    import: configserver:http://localhost:8888/config
+    import: configserver:http://service-main:8888/config
   data:
     redis:
       port: 6379
@@ -26,7 +26,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8888/eureka
+      defaultZone: http://service-main:8888/eureka
   instance:
     prefer-ip-address: false
     hostname: service-users
