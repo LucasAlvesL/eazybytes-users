@@ -1,0 +1,6 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"      # Set to "/" if pom.xml is at the root; adjust if in a subdirectory.
+    schedule:
+      interval: "weekly"
