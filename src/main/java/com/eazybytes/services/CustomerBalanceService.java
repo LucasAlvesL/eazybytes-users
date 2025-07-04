@@ -1,5 +1,6 @@
 package com.eazybytes.services;
 
+import com.eazybytes.dtos.CustomerBalanceRequestDTO;
 import com.eazybytes.dtos.CustomerBalanceResponseDTO;
 import com.eazybytes.dtos.CustomerProfileResponseDTO;
 import com.eazybytes.repository.CustomerRepository;
@@ -24,7 +25,7 @@ public class CustomerBalanceService {
     }
 
     @Transactional
-    public CustomerBalanceResponseDTO deposit(UUID customerId, BigDecimal amount) {
+    public CustomerBalanceResponseDTO deposit(UUID customerId, CustomerBalanceRequestDTO request) {
         String redisKey = "customer:profile:" + customerId;
 
         CustomerBalanceResponseDTO cachedProfile = (CustomerBalanceResponseDTO) redisTemplate.opsForValue().get(redisKey);
@@ -34,10 +35,10 @@ public class CustomerBalanceService {
 
         var customer = this.repository.findById(customerId).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
-        if (amount.compareTo(BigDecimal.ZERO) <= 0)
+        if (request.amount() == null || request.amount().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Amount must be positive");
 
-        customer.setBalance(customer.getBalance().add(amount));
+        customer.setBalance(customer.getBalance().add(request.amount()));
         this.repository.save(customer);
 
         CustomerBalanceResponseDTO response = new CustomerBalanceResponseDTO(customer.getBalance());
@@ -48,7 +49,7 @@ public class CustomerBalanceService {
     }
 
     @Transactional
-    public CustomerBalanceResponseDTO withdraw(UUID customerId, BigDecimal amount) {
+    public CustomerBalanceResponseDTO withdraw(UUID customerId, CustomerBalanceRequestDTO request) {
         String redisKey = "customer:profile:" + customerId;
 
         CustomerBalanceResponseDTO cachedProfile = (CustomerBalanceResponseDTO) redisTemplate.opsForValue().get(redisKey);
@@ -58,12 +59,12 @@ public class CustomerBalanceService {
 
         var customer = this.repository.findById(customerId).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
-        if (amount.compareTo(BigDecimal.ZERO) <= 0)
+        if (request.amount().compareTo(BigDecimal.ZERO) <= 0)
             throw new IllegalArgumentException("Amount must be positive");
-        if (customer.getBalance().compareTo(amount) < 0)
+        if (customer.getBalance().compareTo(request.amount()) < 0)
             throw new IllegalArgumentException("Insufficient funds");
 
-        customer.setBalance(customer.getBalance().subtract(amount));
+        customer.setBalance(customer.getBalance().subtract(request.amount()));
         this.repository.save(customer);
 
         CustomerBalanceResponseDTO response = new CustomerBalanceResponseDTO(customer.getBalance());

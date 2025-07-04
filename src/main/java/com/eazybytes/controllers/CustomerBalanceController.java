@@ -37,7 +37,7 @@ public class CustomerBalanceController {
     public ResponseEntity<Object> deposit(HttpServletRequest request, @Valid @RequestBody CustomerBalanceRequestDTO customerBalanceRequestDTO) {
         var customerId = request.getAttribute("customer_id");
         try {
-            var response = service.deposit(UUID.fromString(customerId.toString()), customerBalanceRequestDTO.amount());
+            var response = service.deposit(UUID.fromString(customerId.toString()), customerBalanceRequestDTO);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -55,7 +55,7 @@ public class CustomerBalanceController {
     public ResponseEntity<Object> withdraw(HttpServletRequest request, @Valid @RequestBody CustomerBalanceRequestDTO customerBalanceRequestDTO) {
         var customerId = request.getAttribute("customer_id");
         try {
-            var response = service.withdraw(UUID.fromString(customerId.toString()), customerBalanceRequestDTO.amount());
+            var response = service.withdraw(UUID.fromString(customerId.toString()), customerBalanceRequestDTO);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
