@@ -1,6 +1,8 @@
 package com.eazybytes.controllers;
 
+import com.eazybytes.dtos.CustomerAccountTypeRequestDTO;
 import com.eazybytes.dtos.CustomerProfileResponseDTO;
+import com.eazybytes.dtos.CustomerUpdateProfileRequestDTO;
 import com.eazybytes.services.CustomerProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -49,4 +49,45 @@ public class CustomerProfileController {
         }
     }
 
+    @PutMapping("/profile/update")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @Operation(summary = "Update Customer Profile", description = "Updates the profile details of the authenticated customer.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = CustomerUpdateProfileRequestDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "User not Found"),
+    })
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> updateCustomerProfile(HttpServletRequest request, CustomerUpdateProfileRequestDTO updatedProfile) {
+        var customerId = request.getAttribute("customer_id");
+
+        try {
+            var profile = service.update(UUID.fromString(customerId.toString()), updatedProfile);
+            return ResponseEntity.ok().body(profile);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/profile/update/account-type")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @Operation(summary = "Update Customer Account Type", description = "Updates the account type of the authenticated customer.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = {
+                    @Content(schema = @Schema(implementation = CustomerAccountTypeRequestDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "User not Found"),
+    })
+    @SecurityRequirement(name = "jwt_auth")
+    public ResponseEntity<Object> updateCustomerAccountType(HttpServletRequest request, @RequestBody CustomerAccountTypeRequestDTO accountTypeRequest) {
+        var customerId = request.getAttribute("customer_id");
+
+        try {
+            var profile = service.updateAccountType(UUID.fromString(customerId.toString()), accountTypeRequest);
+            return ResponseEntity.ok().body(profile);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }
