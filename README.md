@@ -70,3 +70,76 @@ This service adheres to modern microservice principles:
 - `POST /customers/signin`: Authenticates a customer and returns a JWT token.
 
 ---
+
+## Current Features
+
+The following features are currently implemented in this microservice:
+
+| Feature Category | Feature | Status | Description |
+|------------------|---------|--------|-------------|
+| **Authentication & Security** | Customer Registration | ✅ Implemented | New customer signup with validation |
+| | Customer Sign-In | ✅ Implemented | Email/password authentication |
+| | JWT Authentication | ✅ Implemented | Secure token-based access control |
+| | Password Hashing | ✅ Implemented | BCrypt encryption for passwords |
+| | Role-Based Access Control | ✅ Implemented | RBAC with customer roles |
+| **Account Management** | Profile Retrieval | ✅ Implemented | Get authenticated customer profile |
+| | Account Number Generation | ✅ Implemented | Unique account numbers with Luhn algorithm |
+| | Basic Account Info | ✅ Implemented | Store customer and account details |
+| **Performance & Reliability** | Redis Caching | ✅ Implemented | High-performance profile caching |
+| | Input Validation | ✅ Implemented | Request validation and error handling |
+| | Database Management | ✅ Implemented | JPA with SQL database integration |
+| **Documentation & Deployment** | API Documentation | ✅ Implemented | Swagger/OpenAPI integration |
+| | Docker Support | ✅ Implemented | Containerization for deployment |
+| | Audit Trails | ✅ Implemented | Created/updated timestamps |
+
+---
+
+## Planned Features & Roadmap
+
+The following features are planned for development to create a complete banking accounts service:
+
+| Priority | Feature Category | Feature | Description | Business Impact |
+|----------|------------------|---------|-------------|-----------------|
+| **High** | **Account Lifecycle** | Account Closure | Deactivate/delete customer accounts safely | Customer retention & compliance |
+| | | Account Updates | Modify customer information (name, email, etc.) | Customer service & data accuracy |
+| | | Multiple Account Types | Allow customers to open additional accounts | Revenue growth & customer satisfaction |
+| | **Core Banking Operations** | Deposit Operations | Accept money deposits to accounts | Core banking functionality |
+| | | Withdrawal Operations | Process money withdrawals from accounts | Core banking functionality |
+| | | Balance Inquiries | Real-time account balance checking | Customer self-service |
+| **Medium** | **Transaction Management** | Transaction History | View account transaction history | Customer transparency |
+| | | Account Statements | Generate account statements (PDF/digital) | Regulatory compliance |
+| | | Transaction Limits | Set and enforce daily/monthly limits | Risk management |
+| | **Account Administration** | Account Status Management | Freeze/unfreeze accounts | Fraud prevention |
+| | | Admin Search & Filtering | Search customers by various criteria | Administrative efficiency |
+| | | Account Linking | Link accounts for families/joint accounts | Enhanced customer service |
+| **Low** | **Advanced Features** | Beneficiary Management | Add/manage payment beneficiaries | Enhanced user experience |
+| | | Inter-Account Transfers | Transfer money between own accounts | Customer convenience |
+| | | Transaction Categories | Categorize transactions for reporting | Financial insights |
+| | | Notification System | Real-time transaction notifications | Customer engagement |
+
+### Implementation Roadmap
+
+#### Phase 1: Core Account Operations (Priority: High)
+- **Account Updates API**: `PUT /customers/profile` - Update customer information
+- **Account Closure API**: `DELETE /customers/account` - Safely close accounts
+- **Multiple Accounts**: Redesign data model to support multiple accounts per customer
+
+#### Phase 2: Banking Transactions (Priority: High)
+- **Deposit API**: `POST /accounts/{accountId}/deposit` - Process deposits
+- **Withdrawal API**: `POST /accounts/{accountId}/withdraw` - Process withdrawals  
+- **Balance API**: `GET /accounts/{accountId}/balance` - Get current balance
+
+#### Phase 3: Transaction Management (Priority: Medium)
+- **Transaction History API**: `GET /accounts/{accountId}/transactions` - View transaction history
+- **Transaction Limits**: Implement daily/monthly transaction limits
+- **Account Status Management**: Admin APIs for account freeze/unfreeze
+
+#### Phase 4: Advanced Features (Priority: Low)
+- **Admin Panel APIs**: Search, filter, and manage customer accounts
+- **Beneficiary Management**: Add/remove payment beneficiaries
+- **Enhanced Reporting**: Account statements and analytics
+
+### Contributing
+Contributors are welcome to help implement these planned features. Please check the repository issues for specific feature requests and implementation guidelines.
+
+---
