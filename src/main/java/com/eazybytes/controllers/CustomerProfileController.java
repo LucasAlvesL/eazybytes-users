@@ -3,6 +3,8 @@ package com.eazybytes.controllers;
 import com.eazybytes.dtos.CustomerAccountTypeRequestDTO;
 import com.eazybytes.dtos.CustomerProfileResponseDTO;
 import com.eazybytes.dtos.CustomerUpdateProfileRequestDTO;
+import com.eazybytes.entity.CustomerEntity;
+import com.eazybytes.repository.CustomerRepository;
 import com.eazybytes.services.CustomerProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,8 +27,14 @@ import java.util.UUID;
 @Tag(name = "Customer Profile", description = "Customer profile management")
 public class CustomerProfileController {
 
-    @Autowired
-    private CustomerProfileService service;
+    private final CustomerProfileService service;
+    
+    private final CustomerRepository repository;
+
+    public CustomerProfileController(CustomerProfileService service, CustomerRepository repository) {
+        this.service = service;
+        this.repository = repository;
+    }
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('CUSTOMER')")
@@ -89,5 +97,12 @@ public class CustomerProfileController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerEntity> getUserById(@PathVariable UUID id) {
+        return this.repository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

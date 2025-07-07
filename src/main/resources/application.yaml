@@ -34,7 +34,7 @@ eureka:
 security:
   token:
     secret:
-      customer: "SECRET_KEY"
+      customer: "U8dN6z2kFf3LwXq1T7vGj9hYbCeLmZaQ"
 
 management:
   endpoints:
